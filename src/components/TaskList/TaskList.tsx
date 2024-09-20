@@ -1,7 +1,9 @@
-import styles from './taskList.module.scss'
+import PropTypes from 'prop-types'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { Todo } from '../../@types/todo.type'
+import styles from './taskList.module.scss'
+import { TodoTypes } from '../../PropTypes/todo.proptypes'
 
 interface TaskListProps {
   doneTaskList?: boolean
@@ -44,4 +46,12 @@ export default function TaskList(props: TaskListProps) {
       </div>
     </div>
   )
+}
+
+TaskList.propTypes = {
+  doneTaskList: PropTypes.bool,
+  todos: PropTypes.arrayOf(TodoTypes),
+  handleDoneTodo: PropTypes.func.isRequired,
+  startEditTodo: PropTypes.func.isRequired,
+  deleteTodo: PropTypes.func.isRequired
 }

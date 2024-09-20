@@ -1,14 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import TaskInput from '../TaskInput'
 import TaskList from '../TaskList'
 import styles from './todoList.module.scss'
 import { Todo } from '../../@types/todo.type'
 
 export default function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([])
+  // const [todos, setTodos] = useState<Todo[]>([])
+  const [todos, setTodos] = useState<Todo[]>(() => {
+    const todosString = localStorage.getItem('todos')
+    return todosString ? JSON.parse(todosString) : []
+  })
   const [currentTodo, setCurrentTodo] = useState<Todo | null>(null)
   const doneTodos = todos.filter((todo) => todo.done)
   const notdoneTodos = todos.filter((todo) => !todo.done)
+
+  // useEffect(() => {
+  //   const todosString = localStorage.getItem('todos')
+  //   const todosObj: Todo[] = JSON.parse(todosString || '[]')
+  //   setTodos(todosObj)
+  // }, [])
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos))
+  }, [todos])
+
+  // useEffect(() => {
+  //   if (todos.length > 0) {
+  //     localStorage.setItem('todos', JSON.stringify(todos))
+  //   }
+  // }, [todos])
 
   const addTodo = (name: string) => {
     const todo: Todo = {
@@ -17,6 +37,11 @@ export default function TodoList() {
       id: new Date().toISOString()
     }
     setTodos((prev) => [...prev, todo])
+
+    // const todosString = localStorage.getItem('todos')
+    // const todosObj: Todo[] = JSON.parse(todosString || '[]')
+    // const newTodosObj = [...todos, todo]
+    // localStorage.setItem('todos', JSON.stringify(newTodosObj))
   }
 
   const handleDoneTodo = (id: string, done: boolean) => {
